@@ -1,0 +1,40 @@
+// input
+input_seq = round(grand(1, 8, "uin", 0, 1))
+
+nrz_form = 2*input_seq - 1
+nrz_form = matrix(nrz_form, 2, -1)
+nrz_form = nrz_form'
+
+disp(input_seq)
+disp(m)
+
+samples = 50
+frequency = 1000
+time_per_bit = 1/frequency
+time_vector = 1:time_per_bit / samples:time_per_bit
+
+// carrier
+cosine = cos(2*%pi*frequency*time_vector)
+sine = sin(2*%pi*frequency*time_vector)
+
+// QPSK
+message_signal = [] 
+modualted_signal = []
+
+for i = 1:length(input_seq)/2
+    message_signal = nrz_form(i)
+    cos_comp = nrz_form(i, 1) * cosine
+    sin_comp = nrz_form(i, 2) * sine
+    overall = cos_comp + sin_comp
+    modulated_signal = cat(1, modulated_signal, overall)
+end
+
+// plot
+big_time = 1:time_per_bit / samples:time_per_bit*(length(input_seq))/2
+
+subplot(2, 1, 1)
+plot(nrz_form, big_time)
+
+subplot(2, 1, 1)
+plot(modulated_sgianl, big_time)
+// demodulated
